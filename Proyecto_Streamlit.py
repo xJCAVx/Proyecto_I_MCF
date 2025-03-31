@@ -80,8 +80,8 @@ if activo_seleccionado:
         return resultados
 
     var_es_results = calcular_var_es(df_rendimientos[activo_seleccionado])
+    st.subheader("Subtitulo")
     st.dataframe(var_es_results)
-#print("Resultados de VaR y ES para cada activo con diferentes niveles de condianza y distribuciones:")
-#print(var_es_results)
+
 
 
