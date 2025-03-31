@@ -1,89 +1,87 @@
-# Librerias -------------------------------------------------------------------------
-import streamlit as st
 import pandas as pd
 import numpy as np
 import yfinance as yf
 import matplotlib.pyplot as plt
-import seaborn as sns 
-from scipy.stats import kurtosis, skew, norm, t
-
-# a) --------------------------------------------------------------------------------
-
-# Descargamos la información de los activos desde 2010
-def obtener_datos(stocks):
-    df = yf.download(stocks, period="1y")['Close']
-    return df
-#start='2010-01-01'
-activos = ['GOOGL','AMZN','META','NFLX','TSLA']
-df_precios=obtener_datos(activos)
-
-st.title("TITULO")
-st.header("SUBTITULO")
-
-activo_seleccionado = st.selectbox("Selecciona una activo", activos)
-
-
-# b) --------------------------------------------------------------------------------
-
-#Calculamos los rendimientos diarios, la media, el sesgo y el exceso de curtosis
+from scipy.stats import norm, t
 
 def calcular_rendimientos(df):
     return df.pct_change().dropna()
+
+# a) Carga y descarga de datos financieros
+M7 = ['GOOGL', 'AMZN', 'META', 'NFLX', 'TSLA']
+df_precios = yf.download(M7, start='2010-01-01', end='2025-03-30', progress=False)['Close']
+
+print("Datos de precios descargados")
+print(df_precios.tail())
+
+# b) Calculamos los rendimientos 
 df_rendimientos = calcular_rendimientos(df_precios)
 
-if activo_seleccionado:
-    st.subheader(f"Métricas de Rendimiento: {activo_seleccionado}")
+# Cálculo de rendimientos y estadísticas descriptivas
+promedios = df_rendimientos.mean()
+skewness = df_rendimientos.apply(lambda x: x.skew())
+kurtosis_vals = df_rendimientos.apply(lambda x: x.kurtosis())
 
-    media = df_rendimientos[activo_seleccionado].mean()
-    sesgo = skew(df_rendimientos[activo_seleccionado])
-    curtosis = kurtosis(df_rendimientos[activo_seleccionado])
-    
-    col1, col2, col3= st.columns(3)
-    col1.metric("Rendimiento Medio Diario", f"{media:.4%}")
-    col2.metric("Sesgo", f"{sesgo:.4}")
-    col3.metric("Curtosis", f"{curtosis:.4}")
+# Creamos un DataFrame con los resultados
+estadisticas = pd.DataFrame({'Media': promedios, 'Sesgo': skewness, 'Curtosis': kurtosis_vals})
 
-# c) --------------------------------------------------------------------------------
-# Calculo de VAR y ES con distintos métodos para múltiples valores de alpha
+# Mostramos las estadísticas
+print("Estadísticas descriptivas de los rendimientos")
+print(estadisticas)
 
-# def calcular_var_es(df_rendimientos, alphas = [0.95, 0.975, 0.99]):
-    
-#     resultados = {}
-#     df_size = len(df)
+# c) Calculo de VAR y ES con distintos métodos para múltiples valores de alpha
+def calcular_var_es(df, NCS=[0.05, 0.025, 0.01]):
+    resultados = {}
+    df_size = len(df)
 
-#     for alpha in alphas:
-#         mean = df.mean()
-#         stdev = df.std()
+    for NC in NCS:
+        mean = df.mean()
+        stdev = df.std()
 
-#         #VaR Paramétrico(normal)
-#         VaR_norm = norm.ppf(1 - alpha,mean,stdev)
+        # VaR Paramétrico (normal)
+        VaR_norm = norm.ppf(1 - NC, mean, stdev)
 
-#         #VaR Paramétrico (t-student)
-#         nu = df_size - 1 # Grados de libertad
-#         VaR_t = t.ppf(1 - alpha, nu, mean, stdev)
+        # VaR Paramétrico (t-student)
+        nu = df_size - 1  # Grados de libertad
+        VaR_t = t.ppf(1 - NC, nu, loc=mean, scale=stdev)
 
-#         #VaR Histórico
-#         VaR_hist = df.quantile(1 - alpha)
+        # VaR Histórico
+        VaR_hist = df.quantile(1 - NC)
 
-#         #VaR Monte Carlo 
-#         sim_return = np.random.normal(mean, stdev, 100000)
-#         VaR_MC = np.percentile(sim_return, (1 - alpha) * 100)
+        # VaR Monte Carlo
+        sim_return = np.random.normal(mean, stdev, 100000)
+        VaR_MC = np.percentile(sim_return, (1 - NC) * 100)
 
-#         #ES Normal
-#         ES_norm = mean - (stdev * norm.pdf(norm.ppf(alpha)) / (1 - alpha))
+        # ES Normal
+        ES_norm = mean - (stdev * norm.pdf(norm.ppf(NC)) / (1 - NC))
 
-#         #ES t-student
-#         ES_t = mean - (stdev * t.pdf(t.ppf(alpha,nu),nu) / (1-alpha))
+        # ES t-student
+        ES_t = mean - (stdev * t.pdf(t.ppf(NC, nu), nu) / (1 - NC))
 
-#         resultados[f'VaR (Normal){alpha}'] = VaR_norm
-#         resultados[f'VaR (t-Student){alpha}'] = VaR_t
-#         resultados[f'VaR (Histórico){alpha}'] = VaR_hist
-#         resultados[f'ES (Normal){alpha}'] = ES_norm
-#         resultados[f'ES (t-studen){alpha}'] = ES_t
+        # ES Histórico
+        ES_hist = df[df <= VaR_hist].mean()
 
-#     return pd.DataFrame(resultados)
-    
-#     var_es_results = df_rendimientos.apply(calcular_var_es)
+        # ES Monte Carlo
+        ES_MC = sim_return[sim_return <= VaR_MC].mean()
 
-#     print("Resultados de VaR y ES para cada activo con diferentes niveles de condianza y distribuciones:")
-#     print(var_es_results)
+        resultados[f'VaR (Normal) {NC}'] = VaR_norm
+        resultados[f'VaR (t-Student) {NC}'] = VaR_t
+        resultados[f'VaR (Histórico) {NC}'] = VaR_hist
+        resultados[f'VaR (Monte Carlo) {NC}'] = VaR_MC
+        resultados[f'ES (Normal) {NC}'] = ES_norm
+        resultados[f'ES (t-Student) {NC}'] = ES_t
+        resultados[f'ES (Histórico) {NC}'] = ES_hist
+        resultados[f'ES (Monte Carlo) {NC}'] = ES_MC
+
+    return pd.Series(resultados)
+
+# Aplicamos la función sobre cada columna de rendimientos de cada activo individualmente
+var_es_results = pd.DataFrame()
+
+# Iteramos sobre cada columna de df_rendimientos
+for column in df_rendimientos.columns:
+    var_es_results[column] = calcular_var_es(df_rendimientos[column])
+
+# Mostramos los resultados
+print("\nResultados de VaR y ES para cada activo con diferentes niveles de confianza y distribuciones:")
+print(var_es_results)
