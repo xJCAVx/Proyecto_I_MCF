@@ -81,7 +81,7 @@ if activo_seleccionado:
 
     var_es_results = calcular_var_es(df_rendimientos[activo_seleccionado])
     st.subheader("Subtitulo")
-    st.dataframe(var_es_results)
+    st.table(var_es_results)
 
 
 
