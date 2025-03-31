@@ -50,7 +50,6 @@ if activo_seleccionado:
         NCS = [0.95, 0.975, 0.99]
         resultados =  pd.DataFrame(columns=['VaR (Normal)', 'ES (Normal)','VaR (t-Student)','ES (t-Student)','VaR (Histórico)', 'ES (Histórico)', 'VaR (Monte Carlo)', 'ES (Monte Carlo)'])
         df_size = len(df)
-        i=0
         for NC in NCS:
             mean = df.mean()
             stdev = df.std()
@@ -73,13 +72,11 @@ if activo_seleccionado:
 
             # VaR Monte Carlo
             sim_return = np.random.normal(mean, stdev, 100000)
-            VaR_MC = np.percentile(sim_return, 1 - NC)
+            VaR_MC = np.percentile(sim_return, (1 - NC)*100)
             # ES Monte Carlo
             ES_MC = sim_return[sim_return <= VaR_MC].mean()
             
-            resultados.loc[i] = [VaR_norm, ES_norm, VaR_t, ES_t, VaR_hist, ES_hist, VaR_MC, ES_MC]
-            i+=1
-        resultados.index = [f'{int(NC*100)}% de confianza' for NC in NCS]
+            resultados.loc[f"{int(NC * 100)}% de confianza"] = [VaR_norm, ES_norm, VaR_t, ES_t, VaR_hist, ES_hist, VaR_MC, ES_MC]
         return resultados
 
     var_es_results = calcular_var_es(df_rendimientos)
