@@ -79,7 +79,7 @@ if activo_seleccionado:
             resultados.loc[f"{int(NC * 100)}% de confianza"] = [VaR_norm, ES_norm, VaR_t, ES_t, VaR_hist, ES_hist, VaR_MC, ES_MC]
         return resultados
 
-    var_es_results = calcular_var_es(df_rendimientos)
+    var_es_results = calcular_var_es(df_rendimientos[activo_seleccionado])
     st.dataframe(var_es_results)
 #print("Resultados de VaR y ES para cada activo con diferentes niveles de condianza y distribuciones:")
 #print(var_es_results)
