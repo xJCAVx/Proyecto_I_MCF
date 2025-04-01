@@ -84,5 +84,18 @@ if activo_seleccionado:
     st.subheader("Subtitulo")
     st.dataframe(var_es_results)
 
+# d) --------------------------------------------------------------------------------
+
+# Cálculo de VaR y ES con ventanas móviles para alpha 0.05 y 0.01
+
+
+
+
+
+
+
+
+
+
 
 
