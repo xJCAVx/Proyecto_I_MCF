@@ -1,4 +1,5 @@
 # Librerias -------------------------------------------------------------------------
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -22,7 +23,6 @@ st.header("SUBTITULO")
 
 activo_seleccionado = st.selectbox("Selecciona una activo", activos)
 
-
 # b) --------------------------------------------------------------------------------
 
 #Calculamos los rendimientos diarios, la media, el sesgo y el exceso de curtosis
@@ -44,6 +44,7 @@ if activo_seleccionado:
     col3.metric("Curtosis", f"{curtosis:.4}")
 
 # c) --------------------------------------------------------------------------------
+
 # Calculo de VAR y ES con distintos métodos para múltiples valores de alpha
 
     def calcular_var_es(df):
