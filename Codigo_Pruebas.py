@@ -136,6 +136,34 @@ plt.legend()
 plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
 plt.title("Rendimientos vs. VaR y ES")
 plt.show()
-
-
 # Agregar a Streamlit para poder activar y desactivar las medidas de riesgo.
+
+
+# e) Conteo y resumen de violaciones.
+
+def Calcular_Violaciones(dfretornos , DataframeVaryES):
+  NumeroViolaciones = []
+  Porcentaje_ViolacionesVar = []
+  TotalDatos = len(dfretornos) - 251
+
+  # Calculamos violaciones
+  for columna in DataframeVaryES:
+    ViolacionesVar = dfretornos < DataframeVaryES[columna]
+    Numero_ViolacionesVar = ViolacionesVar.sum()
+
+    NumeroViolaciones.append(Numero_ViolacionesVar)
+    Porcentaje_ViolacionesVar.append((Numero_ViolacionesVar / TotalDatos) * 100)
+
+  # Metemos los resultados "%"" en una tabla
+  TablaResultados = pd.DataFrame({
+    '--': ['VaR' , 'ES'],
+    'Histórico 5%' : [Porcentaje_ViolacionesVar[0] , Porcentaje_ViolacionesVar[1]],
+    'Paramétrico 5%' : [Porcentaje_ViolacionesVar[2] , Porcentaje_ViolacionesVar[3]],
+    'Histórico 1%' : [Porcentaje_ViolacionesVar[4] , Porcentaje_ViolacionesVar[5]],
+    'Paramétrico 1%' : [Porcentaje_ViolacionesVar[6] , Porcentaje_ViolacionesVar[7]],
+  })
+
+  return TablaResultados
+
+# Para ver la tabla
+Calcular_Violaciones(df_rendimientoPARTICULAR , df_var_es_rolling) # Los datos son porcentajes
