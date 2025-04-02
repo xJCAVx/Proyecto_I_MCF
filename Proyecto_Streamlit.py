@@ -125,8 +125,6 @@ if activo_seleccionado:
     ax.set_title("Rendimientos vs. VaR y ES")
 
     st.pyplot(fig)
-    st.write(df_var_es_rolling.head())  # Verifica que el DataFrame no está vacío
-    st.write(df_var_es_rolling.columns)
 
 
 
