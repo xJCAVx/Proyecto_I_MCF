@@ -19,8 +19,8 @@ def obtener_datos(stocks):
 activos = ['GOOGL','AMZN','META','NFLX','TSLA']
 df_precios=obtener_datos(activos)
 
-st.title("TITULO")
-st.header("SUBTITULO")
+st.title("Análisis de Riesgos Financieros")
+st.header("Evaluación de métricas de riesgo y rendimiento para activos financieros")
 
 activo_seleccionado = st.selectbox("Selecciona una activo", activos)
 
@@ -82,7 +82,7 @@ if activo_seleccionado:
         return resultados
 
     var_es_results = calcular_var_es(df_rendimientos[activo_seleccionado])
-    st.subheader("Subtitulo")
+    st.subheader("Cálculo de VaR y Expected Shortfall")
     st.dataframe(var_es_results)
 
 # d) --------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ if activo_seleccionado:
     #Aplicamos la función que creamos para los rendimientos del activo seleccionado
     df_var_es_rolling = rolling_var_es(df_rendimientos[activo_seleccionado])
 
-    st.subheader("Subtitulo")
+    st.subheader("Rolling Window para VaR y ES (252 días)")
 
     opciones = [
         "Rendimientos",
@@ -214,7 +214,7 @@ if activo_seleccionado:
                         name='ES Paramétrico 1%', line=dict(color='pink', dash='dot'))
 
     # Agregar título y etiquetas
-    fig.update_layout(title="Rendimientos vs. VaR y ES",
+    fig.update_layout(title="Rendimientos vs. VaR y ES",title=0.5,
                     xaxis_title="Fecha",
                     font=dict(size=15))
     
