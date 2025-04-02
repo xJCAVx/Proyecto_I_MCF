@@ -177,7 +177,7 @@ if activo_seleccionado:
         TotalDatos = len(dfretornos) - 251
 
     # Calculamos violaciones
-        for columna in DataframeVaryES:
+        for columna in DataframeVaryES.columns:
             ViolacionesVar = dfretornos < DataframeVaryES[columna]
             Numero_ViolacionesVar = ViolacionesVar.sum()
 
