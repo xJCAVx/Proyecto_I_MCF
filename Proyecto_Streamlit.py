@@ -221,7 +221,12 @@ if activo_seleccionado:
                     font=dict(size=15))
 
     # Mostrar gráfico en Streamlit
-    st.plotly_chart(fig)
+    fig.update_layout(
+    hovermode="x unified",  # Muestra etiquetas al pasar el cursor sobre la gráfica
+    dragmode="pan"  # Permite desplazar la gráfica con el mouse
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
 
 
 
