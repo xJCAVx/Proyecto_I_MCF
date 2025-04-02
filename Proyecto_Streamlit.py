@@ -123,7 +123,7 @@ if activo_seleccionado:
     series_seleccionadas = st.multiselect("Selecciona las medidas a visualizar", opciones, default=opciones)
 
     # Graficamos según la selección
-    fig, ax = plt.subplots(figsize=(20, 9))
+    fig, ax = plt.subplots(figsize=(15, 8))
 
     if "Rendimientos" in series_seleccionadas:
         ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos')
@@ -148,10 +148,10 @@ if activo_seleccionado:
     if "ES (Parametrico) 0.01" in series_seleccionadas:
         ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.01"], label='ES Paramétrico 1%', linestyle=':', color='pink')
 
-    ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4,fontsize=15)
-    ax.tick_params(axis="both", labelsize=15)
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4,fontsize=14)
+    ax.tick_params(axis="both", labelsize=14)
     ax.set_title("Rendimientos vs. VaR y ES", fontsize=20)
-    ax.set_xlabel("Fecha", fontsize=15)
+    ax.set_xlabel("Fecha", fontsize=14)
     plt.tight_layout()
     st.pyplot(fig)
 
