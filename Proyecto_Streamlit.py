@@ -158,7 +158,7 @@ if activo_seleccionado:
     fig.update_layout(
         legend=dict(title="Medidas seleccionadas", orientation="h",yanchor="top",  y=-0.3, xanchor="center",x=0.5)
     )
-
+#hola
     # Mostrar gráfico en Streamlit
     fig.update_layout(
     hovermode="x unified",  # Muestra etiquetas al pasar el cursor sobre la gráfica
