@@ -123,7 +123,7 @@ if activo_seleccionado:
     series_seleccionadas = st.multiselect("Selecciona las medidas a visualizar", opciones, default=opciones)
 
     # Graficamos según la selección
-    fig, ax = plt.subplots(figsize=(16, 9))
+    fig, ax = plt.subplots(figsize=(20, 9))
 
     if "Rendimientos" in series_seleccionadas:
         ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos')
@@ -152,6 +152,7 @@ if activo_seleccionado:
     ax.tick_params(axis="both", labelsize=15)
     ax.set_title("Rendimientos vs. VaR y ES", fontsize=20)
     ax.set_xlabel("Fecha", fontsize=15)
+    plt.tight_layout()
     st.pyplot(fig)
 
 
