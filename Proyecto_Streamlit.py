@@ -216,9 +216,18 @@ if activo_seleccionado:
     # Agregar título y etiquetas
     fig.update_layout(title="Rendimientos vs. VaR y ES",
                     xaxis_title="Fecha",
-                    yaxis_title="Valor",
-                    legend_title="Medidas",
                     font=dict(size=15))
+    
+    fig.update_layout(
+        legend=dict(
+            title="Medidas seleccionadas",  # Cambia el título de la leyenda
+            orientation="h",  # Orientación horizontal
+            yanchor="top",  
+            y=-0.3,  # Ajusta la posición vertical debajo de la gráfica
+            xanchor="center",
+            x=0.5
+        )
+    )
 
     # Mostrar gráfico en Streamlit
     fig.update_layout(
