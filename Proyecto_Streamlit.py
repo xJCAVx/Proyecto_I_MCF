@@ -112,23 +112,21 @@ if activo_seleccionado:
     df_var_es_rolling = rolling_var_es(df_rendimientos[activo_seleccionado])
 
     # Graficamos las ganancias y pérdidas junto con VaR y ES
+    fig, ax = plt.subplots(figsize=(14, 7))
+    ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos')
+    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Histórico) 0.05'], label='VaR Histórico 5%', linestyle='dashed', color='red')
+    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Histórico) 0.01'], label='VaR Histórico 1%', linestyle='dashed', color='blue')
+    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Parametrico) 0.05'], label='VaR Paramétrico 5%', linestyle='dashed', color='black')
+    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Parametrico) 0.01'], label='VaR Paramétrico 1%', linestyle='dashed', color='green')
+    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Histórico) 0.05'], label='ES Histórico 5%', linestyle='dashed', color='purple')
+    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Histórico) 0.01'], label='ES Histórico 1%', linestyle='dashed', color='orange')
+    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Parametrico) 0.05'], label='ES Paramétrico 5%', linestyle='dashed', color='brown')
+    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Parametrico) 0.01'], label='ES Paramétrico 1%', linestyle='dashed', color='pink')
+    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+    ax.set_title("Rendimientos vs. VaR y ES")
 
-    plt.figure(figsize=(14, 7))
-    #plt.plot(df_rendimientos.index, df_rendimientos, label='Rendimientos')
-    plt.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos') # Para UN activo
-    plt.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Histórico) 0.05'], label='VaR Histórico 5%', linestyle='dashed', color='red')
-    plt.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Histórico) 0.01'], label='VaR Histórico 1%', linestyle='dashed', color='blue')
-    plt.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Parametrico) 0.01'], label='VaR Paramétrico 1%', linestyle='dashed', color='green')
-    plt.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Parametrico) 0.01'], label='VaR VaR Paramétrico 5%', linestyle='dashed', color='black')
-    plt.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Histórico) 0.05'], label='ES Histórico 5%', linestyle='dashed', color='purple')
-    plt.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Histórico) 0.01'], label='ES Histórico 1%', linestyle='dashed', color='orange')
-    plt.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Parametrico) 0.05'], label='ES Parametrico 5%', linestyle='dashed', color='brown')
-    plt.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Parametrico) 0.01'], label='ES Parametrico 1%', linestyle='dashed', color='pink')
-    plt.legend()
+    st.pyplot(fig)
 
-    plt.legend(loc="upper left", bbox_to_anchor=(1, 1))
-    plt.title("Rendimientos vs. VaR y ES")
-    plt.show()
 
 
 
