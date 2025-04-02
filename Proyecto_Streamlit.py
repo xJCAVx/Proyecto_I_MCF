@@ -214,7 +214,7 @@ if activo_seleccionado:
                         name='ES Paramétrico 1%', line=dict(color='pink', dash='dot'))
 
     # Agregar título y etiquetas
-    fig.update_layout(title="Rendimientos vs. VaR y ES",title_X=0.5,
+    fig.update_layout(title="Rendimientos vs. VaR y ES",title_x=0.5,
                     xaxis_title="Fecha",
                     font=dict(size=15))
     
