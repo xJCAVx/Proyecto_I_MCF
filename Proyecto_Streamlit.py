@@ -12,9 +12,9 @@ from scipy.stats import kurtosis, skew, norm, t
 
 # Descargamos la información de los activos desde 2010
 def obtener_datos(stocks):
-    df = yf.download(stocks, start='2010-01-01')['Close']
+    df = yf.download(stocks, start='2010-01-01',end='2025-04-03')['Close']
     return df
-#start='2010-01-01'
+
 activos = ['GOOGL','AMZN','META','NFLX','TSLA']
 df_precios=obtener_datos(activos)
 
@@ -26,7 +26,7 @@ activo_seleccionado = st.selectbox("Selecciona una activo", activos)
 # b) --------------------------------------------------------------------------------
 
 #Calculamos los rendimientos diarios, la media, el sesgo y el exceso de curtosis
-
+@st.cache_data
 def calcular_rendimientos(df):
     return df.pct_change().dropna()
 df_rendimientos = calcular_rendimientos(df_precios)
@@ -46,7 +46,7 @@ if activo_seleccionado:
 # c) --------------------------------------------------------------------------------
 
 # Calculo de VAR y ES con distintos métodos para múltiples valores de alpha
-
+    @st.cache_data
     def calcular_var_es(df):
         NCS = [0.95, 0.975, 0.99]
         resultados =  pd.DataFrame(columns=['VaR (Normal)', 'ES (Normal)','VaR (t-Student)','ES (t-Student)','VaR (Histórico)', 'ES (Histórico)', 'VaR (Monte Carlo)', 'ES (Monte Carlo)'])
@@ -87,7 +87,7 @@ if activo_seleccionado:
 # d) --------------------------------------------------------------------------------
 
 # Cálculo de VaR y ES con ventanas móviles para alpha 0.05 y 0.01
-
+    @st.cache_data
     def rolling_var_es(df, window=252, CNS=[0.05, 0.01]):
         resultados = []
 
@@ -126,7 +126,7 @@ if activo_seleccionado:
     # st.pyplot(fig)
 
     st.subheader("Subtitulo")
-    
+
     opciones = [
         "Rendimientos",
         "VaR (Histórico) 0.05", "VaR (Histórico) 0.01",
@@ -165,7 +165,7 @@ if activo_seleccionado:
 
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=4)
     ax.set_title("Rendimientos vs. VaR y ES")
-
+    ax.set_xlabel("Fecha")
     st.pyplot(fig)
 
 
