@@ -149,9 +149,9 @@ if activo_seleccionado:
         ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.01"], label='ES Paramétrico 1%', linestyle=':', color='pink')
 
     ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.15), ncol=4,fontsize=15)
-    ax.tick_params(axis="both", labelsize=15)
+    ax.tick_params(axis="both", fontsize=15)
     ax.set_title("Rendimientos vs. VaR y ES", fontsize=20)
-    ax.set_xlabel("Fecha", labelsize=15)
+    ax.set_xlabel("Fecha", fontsize=15)
     st.pyplot(fig)
 
 
