@@ -88,7 +88,6 @@ if activo_seleccionado:
 # d) --------------------------------------------------------------------------------
 
 # Cálculo de VaR y ES con ventanas móviles para alpha 0.05 y 0.01
-    @st.cache_data
     def rolling_var_es(df, window=252, CNS=[0.05, 0.01]):
         resultados = []
 
@@ -199,6 +198,7 @@ if activo_seleccionado:
     st.subheader("Tabla de violaciones")
     Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
     st.dataframe(Tabla_violaciones)
+    st.write("Datos calculados de violaciones:", TablaResultados)
 
 
 
