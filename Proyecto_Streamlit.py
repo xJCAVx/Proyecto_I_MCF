@@ -107,27 +107,64 @@ if activo_seleccionado:
         # Concatenamos todos los DataFrames en uno solo
         return pd.concat(resultados, axis=1)
 
+    #Aplicamos la función que creamos para los rendimientos del activo seleccionado
     df_var_es_rolling = rolling_var_es(df_rendimientos[activo_seleccionado])
-    # Mostramos los últimos valores para verificar
-    st.write(df_var_es_rolling.tail())
-    # Graficamos las ganancias y pérdidas junto con VaR y ES
+
+    # # Graficamos las ganancias y pérdidas junto con VaR y ES
+    # fig, ax = plt.subplots(figsize=(14, 7))
+    # ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos')
+    # ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Histórico) 0.05'], label='VaR Histórico 5%', linestyle='dashed', color='red')
+    # ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Histórico) 0.01'], label='VaR Histórico 1%', linestyle='dashed', color='blue')
+    # ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Parametrico) 0.05'], label='VaR Paramétrico 5%', linestyle='dashed', color='black')
+    # ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Parametrico) 0.01'], label='VaR Paramétrico 1%', linestyle='dashed', color='green')
+    # ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Histórico) 0.05'], label='ES Histórico 5%', linestyle='dashed', color='purple')
+    # ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Histórico) 0.01'], label='ES Histórico 1%', linestyle='dashed', color='orange')
+    # ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Parametrico) 0.05'], label='ES Paramétrico 5%', linestyle='dashed', color='brown')
+    # ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Parametrico) 0.01'], label='ES Paramétrico 1%', linestyle='dashed', color='pink')
+    # ax.legend()
+    # ax.set_title("Rendimientos vs. VaR y ES")
+    # st.pyplot(fig)
+
+    opciones = [
+        "Rendimientos",
+        "VaR (Histórico) 0.05", "VaR (Histórico) 0.01",
+        "VaR (Parametrico) 0.05", "VaR (Parametrico) 0.01",
+        "ES (Histórico) 0.05", "ES (Histórico) 0.01",
+        "ES (Parametrico) 0.05", "ES (Parametrico) 0.01"
+    ]
+
+    series_seleccionadas = st.multiselect("Selecciona las medidas a visualizar", opciones, default=opciones)
+
+    # Graficamos según la selección
     fig, ax = plt.subplots(figsize=(14, 7))
-    ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos')
-    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Histórico) 0.05'], label='VaR Histórico 5%', linestyle='dashed', color='red')
-    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Histórico) 0.01'], label='VaR Histórico 1%', linestyle='dashed', color='blue')
-    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Parametrico) 0.05'], label='VaR Paramétrico 5%', linestyle='dashed', color='black')
-    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'VaR (Parametrico) 0.01'], label='VaR Paramétrico 1%', linestyle='dashed', color='green')
-    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Histórico) 0.05'], label='ES Histórico 5%', linestyle='dashed', color='purple')
-    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Histórico) 0.01'], label='ES Histórico 1%', linestyle='dashed', color='orange')
-    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Parametrico) 0.05'], label='ES Paramétrico 5%', linestyle='dashed', color='brown')
-    ax.plot(df_var_es_rolling.index, df_var_es_rolling[f'ES (Parametrico) 0.01'], label='ES Paramétrico 1%', linestyle='dashed', color='pink')
-    ax.legend()
+
+    if "Rendimientos" in series_seleccionadas:
+        ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos', color='black')
+
+    if "VaR (Histórico) 0.05" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Histórico) 0.05"], label='VaR Histórico 5%', linestyle='dashed', color='red')
+    if "VaR (Histórico) 0.01" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Histórico) 0.01"], label='VaR Histórico 1%', linestyle='dashed', color='blue')
+
+    if "VaR (Parametrico) 0.05" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Parametrico) 0.05"], label='VaR Paramétrico 5%', linestyle='dashed', color='black')
+    if "VaR (Parametrico) 0.01" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Parametrico) 0.01"], label='VaR Paramétrico 1%', linestyle='dashed', color='green')
+
+    if "ES (Histórico) 0.05" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Histórico) 0.05"], label='ES Histórico 5%', linestyle='dashed', color='purple')
+    if "ES (Histórico) 0.01" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Histórico) 0.01"], label='ES Histórico 1%', linestyle='dashed', color='orange')
+
+    if "ES (Parametrico) 0.05" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.05"], label='ES Paramétrico 5%', linestyle='dashed', color='brown')
+    if "ES (Parametrico) 0.01" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.01"], label='ES Paramétrico 1%', linestyle='dashed', color='pink')
+
+    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
     ax.set_title("Rendimientos vs. VaR y ES")
+
     st.pyplot(fig)
-
-
-
-
 
 
 
