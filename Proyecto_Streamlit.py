@@ -168,37 +168,37 @@ if activo_seleccionado:
 
 # e) --------------------------------------------------------------------------------
 
-# Conteo y resumen de violaciones
-    @st.cache_data
-    def Calcular_Violaciones(dfretornos , DataframeVaryES):
-        NumeroViolaciones = []
-        Porcentaje_ViolacionesVar = []
-        TotalDatos = len(dfretornos) - 251
+# # Conteo y resumen de violaciones
+#     @st.cache_data
+#     def Calcular_Violaciones(dfretornos , DataframeVaryES):
+#         NumeroViolaciones = []
+#         Porcentaje_ViolacionesVar = []
+#         TotalDatos = len(dfretornos) - 251
 
-    # Calculamos violaciones
-        for columna in DataframeVaryES.columns:
-            ViolacionesVar = dfretornos < DataframeVaryES[columna]
-            Numero_ViolacionesVar = ViolacionesVar.sum()
+#     # Calculamos violaciones
+#         for columna in DataframeVaryES.columns:
+#             ViolacionesVar = dfretornos < DataframeVaryES[columna]
+#             Numero_ViolacionesVar = ViolacionesVar.sum()
 
-            NumeroViolaciones.append(Numero_ViolacionesVar)
-            Porcentaje_ViolacionesVar.append((Numero_ViolacionesVar / TotalDatos) * 100)
+#             NumeroViolaciones.append(Numero_ViolacionesVar)
+#             Porcentaje_ViolacionesVar.append((Numero_ViolacionesVar / TotalDatos) * 100)
 
-    # Metemos los resultados "%"" en una tabla
-        TablaResultados = pd.DataFrame({
-            '--': ['VaR' , 'ES'],
-            'Histórico 5%' : [Porcentaje_ViolacionesVar[0] , Porcentaje_ViolacionesVar[1]],
-            'Paramétrico 5%' : [Porcentaje_ViolacionesVar[2] , Porcentaje_ViolacionesVar[3]],
-            'Histórico 1%' : [Porcentaje_ViolacionesVar[4] , Porcentaje_ViolacionesVar[5]],
-            'Paramétrico 1%' : [Porcentaje_ViolacionesVar[6] , Porcentaje_ViolacionesVar[7]],
-        })
+#     # Metemos los resultados "%"" en una tabla
+#         TablaResultados = pd.DataFrame({
+#             '--': ['VaR' , 'ES'],
+#             'Histórico 5%' : [Porcentaje_ViolacionesVar[0] , Porcentaje_ViolacionesVar[1]],
+#             'Paramétrico 5%' : [Porcentaje_ViolacionesVar[2] , Porcentaje_ViolacionesVar[3]],
+#             'Histórico 1%' : [Porcentaje_ViolacionesVar[4] , Porcentaje_ViolacionesVar[5]],
+#             'Paramétrico 1%' : [Porcentaje_ViolacionesVar[6] , Porcentaje_ViolacionesVar[7]],
+#         })
 
-        return TablaResultados  
+#         return TablaResultados  
 
-    # Para ver la tabla
-    st.subheader("Tabla de violaciones")
-    Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
-    st.dataframe(Tabla_violaciones)
-    st.write("Datos calculados de violaciones:", Tabla_violaciones)
+#     # Para ver la tabla
+#     st.subheader("Tabla de violaciones")
+#     Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
+#     st.dataframe(Tabla_violaciones)
+#     st.write("Datos calculados de violaciones:", Tabla_violaciones)
 
 
 
