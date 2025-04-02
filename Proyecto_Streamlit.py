@@ -16,7 +16,7 @@ def obtener_datos(stocks):
     df = yf.download(stocks, start='2010-01-01',end='2025-04-03')['Close']
     return df
 
-activos = ['GOOGL','AMZN','META','NFLX','TSLA']
+activos = ['GOOGL','AMZN','META']
 df_precios=obtener_datos(activos)
 
 st.title("Análisis de Riesgos Financieros")
