@@ -112,44 +112,17 @@ if activo_seleccionado:
 
     st.subheader("Rolling Windows para VaR y ES (252 días)")
 
-    opciones = [
-        "Rendimientos",
-        "VaR (Histórico) 0.05", "VaR (Histórico) 0.01",
-        "VaR (Parametrico) 0.05", "VaR (Parametrico) 0.01",
-        "ES (Histórico) 0.05", "ES (Histórico) 0.01",
-        "ES (Parametrico) 0.05", "ES (Parametrico) 0.01"
-    ]
-
-    series_seleccionadas = st.multiselect("Selecciona las medidas a visualizar", opciones, default=opciones)
-
     fig = px.line()  # Inicializamos una figura vacía
 
-    if "Rendimientos" in series_seleccionadas:
-        fig.add_scatter(x=df_rendimientos[activo_seleccionado].index, y=df_rendimientos[activo_seleccionado],mode='lines',name='Rendimientos')
-
-    if "VaR (Histórico) 0.05" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Histórico) 0.05"],mode='lines',name='VaR Histórico 5%', line=dict(color='red'))
-
-    if "VaR (Histórico) 0.01" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["VaR (Histórico) 0.01"],mode='lines',name='VaR Histórico 1%', line=dict(color='blue'))
-
-    if "VaR (Parametrico) 0.05" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.05"],mode='lines',name='VaR Paramétrico 5%', line=dict(color='orange'))
-
-    if "VaR (Parametrico) 0.01" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.01"],mode='lines',name='VaR Paramétrico 1%', line=dict(color='green'))
-
-    if "ES (Histórico) 0.05" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Histórico) 0.05"],mode='lines',name='ES Histórico 5%', line=dict(color='red', dash='dot'))
-
-    if "ES (Histórico) 0.01" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["ES (Histórico) 0.01"], mode='lines',name='ES Histórico 1%', line=dict(color='blue', dash='dot'))
-
-    if "ES (Parametrico) 0.05" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.05"], mode='lines',name='ES Paramétrico 5%', line=dict(color='orange', dash='dot'))
-
-    if "ES (Parametrico) 0.01" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.01"],mode='lines',name='ES Paramétrico 1%', line=dict(color='green', dash='dot'))
+    fig.add_scatter(x=df_rendimientos[activo_seleccionado].index, y=df_rendimientos[activo_seleccionado],mode='lines',name='Rendimientos')
+    fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Histórico) 0.05"],mode='lines',name='VaR Histórico 5%', line=dict(color='red'))
+    fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["VaR (Histórico) 0.01"],mode='lines',name='VaR Histórico 1%', line=dict(color='blue'))
+    fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.05"],mode='lines',name='VaR Paramétrico 5%', line=dict(color='orange'))
+    fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.01"],mode='lines',name='VaR Paramétrico 1%', line=dict(color='green'))
+    fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Histórico) 0.05"],mode='lines',name='ES Histórico 5%', line=dict(color='red', dash='dot'))
+    fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["ES (Histórico) 0.01"], mode='lines',name='ES Histórico 1%', line=dict(color='blue', dash='dot'))
+    fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.05"], mode='lines',name='ES Paramétrico 5%', line=dict(color='orange', dash='dot'))
+    fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.01"],mode='lines',name='ES Paramétrico 1%', line=dict(color='green', dash='dot'))
 
     # Agregar título y etiquetas
     fig.update_layout(title="Rendimientos vs. VaR y ES",title_x=0.38,xaxis_title="Fecha",font=dict(size=15))
@@ -168,37 +141,37 @@ if activo_seleccionado:
 
 # e) --------------------------------------------------------------------------------
 
-# # Conteo y resumen de violaciones
-#     @st.cache_data
-#     def Calcular_Violaciones(dfretornos , DataframeVaryES):
-#         NumeroViolaciones = []
-#         Porcentaje_ViolacionesVar = []
-#         TotalDatos = len(dfretornos) - 251
+# Conteo y resumen de violaciones
+    @st.cache_data
+    def Calcular_Violaciones(dfretornos , DataframeVaryES):
+        NumeroViolaciones = []
+        Porcentaje_ViolacionesVar = []
+        TotalDatos = len(dfretornos) - 251
 
-#     # Calculamos violaciones
-#         for columna in DataframeVaryES.columns:
-#             ViolacionesVar = dfretornos < DataframeVaryES[columna]
-#             Numero_ViolacionesVar = ViolacionesVar.sum()
+    # Calculamos violaciones
+        for columna in DataframeVaryES.columns:
+            ViolacionesVar = dfretornos < DataframeVaryES[columna]
+            Numero_ViolacionesVar = ViolacionesVar.sum()
 
-#             NumeroViolaciones.append(Numero_ViolacionesVar)
-#             Porcentaje_ViolacionesVar.append((Numero_ViolacionesVar / TotalDatos) * 100)
+            NumeroViolaciones.append(Numero_ViolacionesVar)
+            Porcentaje_ViolacionesVar.append((Numero_ViolacionesVar / TotalDatos) * 100)
 
-#     # Metemos los resultados "%"" en una tabla
-#         TablaResultados = pd.DataFrame({
-#             '--': ['VaR' , 'ES'],
-#             'Histórico 5%' : [Porcentaje_ViolacionesVar[0] , Porcentaje_ViolacionesVar[1]],
-#             'Paramétrico 5%' : [Porcentaje_ViolacionesVar[2] , Porcentaje_ViolacionesVar[3]],
-#             'Histórico 1%' : [Porcentaje_ViolacionesVar[4] , Porcentaje_ViolacionesVar[5]],
-#             'Paramétrico 1%' : [Porcentaje_ViolacionesVar[6] , Porcentaje_ViolacionesVar[7]],
-#         })
+    # Metemos los resultados "%"" en una tabla
+        TablaResultados = pd.DataFrame({
+            '--': ['VaR' , 'ES'],
+            'Histórico 5%' : [Porcentaje_ViolacionesVar[0] , Porcentaje_ViolacionesVar[1]],
+            'Paramétrico 5%' : [Porcentaje_ViolacionesVar[2] , Porcentaje_ViolacionesVar[3]],
+            'Histórico 1%' : [Porcentaje_ViolacionesVar[4] , Porcentaje_ViolacionesVar[5]],
+            'Paramétrico 1%' : [Porcentaje_ViolacionesVar[6] , Porcentaje_ViolacionesVar[7]],
+        })
 
-#         return TablaResultados  
+        return TablaResultados  
 
-#     # Para ver la tabla
-#     st.subheader("Tabla de violaciones")
-#     Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
-#     st.dataframe(Tabla_violaciones)
-#     st.write("Datos calculados de violaciones:", Tabla_violaciones)
+    # Para ver la tabla
+    st.subheader("Tabla de violaciones")
+    Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
+    st.dataframe(Tabla_violaciones)
+    st.write("Datos calculados de violaciones:", Tabla_violaciones)
 
 
 
