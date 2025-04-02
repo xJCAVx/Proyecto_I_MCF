@@ -135,35 +135,28 @@ if activo_seleccionado:
         fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["VaR (Histórico) 0.01"],mode='lines',name='VaR Histórico 1%', line=dict(color='blue'))
 
     if "VaR (Parametrico) 0.05" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.05"],mode='lines',name='VaR Paramétrico 5%', line=dict(color='black'))
+        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.05"],mode='lines',name='VaR Paramétrico 5%', line=dict(color='orange'))
 
     if "VaR (Parametrico) 0.01" in series_seleccionadas:
         fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.01"],mode='lines',name='VaR Paramétrico 1%', line=dict(color='green'))
 
     if "ES (Histórico) 0.05" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Histórico) 0.05"],mode='lines',name='ES Histórico 5%', line=dict(color='purple', dash='dot'))
+        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Histórico) 0.05"],mode='lines',name='ES Histórico 5%', line=dict(color='red', dash='dot'))
 
     if "ES (Histórico) 0.01" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["ES (Histórico) 0.01"], mode='lines',name='ES Histórico 1%', line=dict(color='orange', dash='dot'))
+        fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["ES (Histórico) 0.01"], mode='lines',name='ES Histórico 1%', line=dict(color='blue', dash='dot'))
 
     if "ES (Parametrico) 0.05" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.05"], mode='lines',name='ES Paramétrico 5%', line=dict(color='brown', dash='dot'))
+        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.05"], mode='lines',name='ES Paramétrico 5%', line=dict(color='orange', dash='dot'))
 
     if "ES (Parametrico) 0.01" in series_seleccionadas:
-        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.01"],mode='lines',name='ES Paramétrico 1%', line=dict(color='pink', dash='dot'))
+        fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.01"],mode='lines',name='ES Paramétrico 1%', line=dict(color='green', dash='dot'))
 
     # Agregar título y etiquetas
-    fig.update_layout(title="Rendimientos vs. VaR y ES",title_x=0.4,xaxis_title="Fecha",font=dict(size=15))
+    fig.update_layout(title="Rendimientos vs. VaR y ES",title_x=0.38,xaxis_title="Fecha",font=dict(size=15))
     
     fig.update_layout(
-        legend=dict(
-            title="Medidas seleccionadas",  # Cambia el título de la leyenda
-            orientation="h",  # Orientación horizontal
-            yanchor="top",  
-            y=-0.3,  # Ajusta la posición vertical debajo de la gráfica
-            xanchor="center",
-            x=0.5
-        )
+        legend=dict(title="Medidas seleccionadas", orientation="h",yanchor="top",  y=-0.3, xanchor="center",x=0.5)
     )
 
     # Mostrar gráfico en Streamlit
