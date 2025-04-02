@@ -12,7 +12,7 @@ from scipy.stats import kurtosis, skew, norm, t
 
 # Descargamos la información de los activos desde 2010
 def obtener_datos(stocks):
-    df = yf.download(stocks, period="1y")['Close']
+    df = yf.download(stocks, start='2010-01-01')['Close']
     return df
 #start='2010-01-01'
 activos = ['GOOGL','AMZN','META','NFLX','TSLA']
