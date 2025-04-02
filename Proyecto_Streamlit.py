@@ -213,20 +213,6 @@ if activo_seleccionado:
     st.pyplot(fig)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # e) --------------------------------------------------------------------------------
 
 # Conteo y resumen de violaciones
@@ -259,7 +245,7 @@ if activo_seleccionado:
     st.subheader("Tabla de violaciones")
     Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
     st.dataframe(Tabla_violaciones)
-    st.write("Datos calculados de violaciones:", Tabla_violaciones)
+
 
 
 
