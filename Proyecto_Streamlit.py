@@ -108,7 +108,6 @@ if activo_seleccionado:
         # Concatenamos todos los DataFrames en uno solo
         return pd.concat(resultados, axis=1)
 
-    # Aplicamos la función corregida
     df_var_es_rolling = rolling_var_es(df_rendimientos[activo_seleccionado])
 
     # Graficamos las ganancias y pérdidas junto con VaR y ES
@@ -126,6 +125,8 @@ if activo_seleccionado:
     ax.set_title("Rendimientos vs. VaR y ES")
 
     st.pyplot(fig)
+    st.write(df_var_es_rolling.head())  # Verifica que el DataFrame no está vacío
+    st.write(df_var_es_rolling.columns)
 
 
 
