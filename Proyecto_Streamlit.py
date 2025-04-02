@@ -125,6 +125,8 @@ if activo_seleccionado:
     # ax.set_title("Rendimientos vs. VaR y ES")
     # st.pyplot(fig)
 
+    st.subheader("Subtitulo")
+    
     opciones = [
         "Rendimientos",
         "VaR (Histórico) 0.05", "VaR (Histórico) 0.01",
@@ -139,7 +141,7 @@ if activo_seleccionado:
     fig, ax = plt.subplots(figsize=(14, 7))
 
     if "Rendimientos" in series_seleccionadas:
-        ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos', color='black')
+        ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label='Rendimientos')
 
     if "VaR (Histórico) 0.05" in series_seleccionadas:
         ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Histórico) 0.05"], label='VaR Histórico 5%', linestyle='dashed', color='red')
@@ -161,7 +163,7 @@ if activo_seleccionado:
     if "ES (Parametrico) 0.01" in series_seleccionadas:
         ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.01"], label='ES Paramétrico 1%', linestyle='dashed', color='pink')
 
-    ax.legend(loc="upper left", bbox_to_anchor=(1, 1))
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), ncol=4)
     ax.set_title("Rendimientos vs. VaR y ES")
 
     st.pyplot(fig)
