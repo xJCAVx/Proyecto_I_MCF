@@ -294,10 +294,11 @@ if activo_seleccionado:
 
     plt.title('VaR con Volatilidad Móvil (Distribución Normal)')
     plt.legend()
-    plt.show()
+    st.pyplot(plt)
 
     # Violaciones para el nuevo VaR
     violaciones_vol_movil = Calcular_Violaciones(df_rendimientos[activo_seleccionado], var_vol_movil)
+    violaciones_vol_movil.iloc[:, 1] = 'Parametrico Normal'
     st.dataframe(violaciones_vol_movil)
 
 
