@@ -138,7 +138,7 @@ if activo_seleccionado:
 
     # st.plotly_chart(fig, use_container_width=True)
 
-        opciones = [
+    opciones = [
         "Rendimientos",
         "VaR (Histórico) 0.05", "VaR (Histórico) 0.01",
         "VaR (Parametrico) 0.05", "VaR (Parametrico) 0.01",
