@@ -136,61 +136,60 @@ if activo_seleccionado:
     # dragmode="pan"  # Permite desplazar la gráfica con el mouse
     # )
 
-    # st.plotly_chart(fig, use_container_width=True)
+    #st.plotly_chart(fig, use_container_width=True)
 
-    # opciones = [
-    #     "Rendimientos",
-    #     "VaR (Histórico) 0.05", "VaR (Histórico) 0.01",
-    #     "VaR (Parametrico) 0.05", "VaR (Parametrico) 0.01",
-    #     "ES (Histórico) 0.05", "ES (Histórico) 0.01",
-    #     "ES (Parametrico) 0.05", "ES (Parametrico) 0.01"
-    # ]
+    opciones = [
+        "Rendimientos",
+        "VaR (Histórico) 0.05", "VaR (Histórico) 0.01",
+        "VaR (Parametrico) 0.05", "VaR (Parametrico) 0.01",
+        "ES (Histórico) 0.05", "ES (Histórico) 0.01",
+        "ES (Parametrico) 0.05", "ES (Parametrico) 0.01"
+    ]
 
-    # series_seleccionadas = st.multiselect("Selecciona las medidas a visualizar", opciones, default=opciones)
+    series_seleccionadas = st.multiselect("Selecciona las medidas a visualizar", opciones, default=opciones)
 
-    # fig, ax = plt.subplots(figsize=(14, 7))
+    fig, ax = plt.subplots(figsize=(14, 7))
 
-    # # Graficar Rendimientos
-    # if "Rendimientos" in series_seleccionadas:
-    #     ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label="Rendimientos")
+    # Graficar Rendimientos
+    if "Rendimientos" in series_seleccionadas:
+        ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label="Rendimientos")
 
-    # # Graficar cada serie según la selección del usuario
-    # if "VaR (Histórico) 0.05" in series_seleccionadas:
-    #     ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Histórico) 0.05"], label="VaR Histórico 5%", linestyle="solid", color="red")
+    # Graficar cada serie según la selección del usuario
+    if "VaR (Histórico) 0.05" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Histórico) 0.05"], label="VaR Histórico 5%", linestyle="solid", color="red")
 
-    # if "VaR (Histórico) 0.01" in series_seleccionadas:
-    #     ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Histórico) 0.01"], label="VaR Histórico 1%", linestyle="solid", color="blue")
+    if "VaR (Histórico) 0.01" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Histórico) 0.01"], label="VaR Histórico 1%", linestyle="solid", color="blue")
 
-    # if "VaR (Parametrico) 0.05" in series_seleccionadas:
-    #     ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Parametrico) 0.05"], label="VaR Paramétrico 5%", linestyle="solid", color="orange")
+    if "VaR (Parametrico) 0.05" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Parametrico) 0.05"], label="VaR Paramétrico 5%", linestyle="solid", color="orange")
 
-    # if "VaR (Parametrico) 0.01" in series_seleccionadas:
-    #     ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Parametrico) 0.01"], label="VaR Paramétrico 1%", linestyle="solid", color="green")
+    if "VaR (Parametrico) 0.01" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["VaR (Parametrico) 0.01"], label="VaR Paramétrico 1%", linestyle="solid", color="green")
 
-    # if "ES (Histórico) 0.05" in series_seleccionadas:
-    #     ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Histórico) 0.05"], label="ES Histórico 5%", linestyle="dotted", color="red")
+    if "ES (Histórico) 0.05" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Histórico) 0.05"], label="ES Histórico 5%", linestyle="dotted", color="red")
 
-    # if "ES (Histórico) 0.01" in series_seleccionadas:
-    #     ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Histórico) 0.01"], label="ES Histórico 1%", linestyle="dotted", color="blue")
+    if "ES (Histórico) 0.01" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Histórico) 0.01"], label="ES Histórico 1%", linestyle="dotted", color="blue")
 
-    # if "ES (Parametrico) 0.05" in series_seleccionadas:
-    #     ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.05"], label="ES Paramétrico 5%", linestyle="dotted", color="orange")
+    if "ES (Parametrico) 0.05" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.05"], label="ES Paramétrico 5%", linestyle="dotted", color="orange")
 
-    # if "ES (Parametrico) 0.01" in series_seleccionadas:
-    #     ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.01"], label="ES Paramétrico 1%", linestyle="dotted", color="green")
+    if "ES (Parametrico) 0.01" in series_seleccionadas:
+        ax.plot(df_var_es_rolling.index, df_var_es_rolling["ES (Parametrico) 0.01"], label="ES Paramétrico 1%", linestyle="dotted", color="green")
 
-    # # Configurar etiquetas y título
-    # ax.set_title("Rendimientos vs. VaR y ES", fontsize=15)
-    # ax.set_xlabel("Fecha", fontsize=12)
-    # ax.set_ylabel("Valor", fontsize=12)
+    # Configurar etiquetas y título
+    ax.set_title("Rendimientos vs. VaR y ES", fontsize=15)
+    ax.set_xlabel("Fecha", fontsize=12)
+    ax.set_ylabel("Valor", fontsize=12)
 
-    # # Configurar leyenda y cuadrícula
-    # ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3, title="Medidas seleccionadas")
-    # ax.grid(True, linestyle="--", alpha=0.5)
+    # Configurar leyenda y cuadrícula
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3, title="Medidas seleccionadas")
+    ax.grid(True, linestyle="--", alpha=0.5)
 
-    # # Mostrar gráfico en Streamlit
-    # st.pyplot(fig)
-
+    # Mostrar gráfico en Streamlit
+    st.pyplot(fig)
 
 # e) --------------------------------------------------------------------------------
 
@@ -214,7 +213,7 @@ if activo_seleccionado:
             #Para mostrar los resultados
             resultados.append({
                 'Medida': columna.split()[0],  # VaR o ES
-                'Método': columna.split()[2] if 'Param' in columna else columna.split()[1],
+                'Método': columna.split()[1],
                 'α': alpha,
                 'Violaciones': violaciones,
                 '% Observado': porcentaje,
