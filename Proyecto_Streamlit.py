@@ -211,7 +211,7 @@ if activo_seleccionado:
 
     # Metemos los resultados "%"" en una tabla
         TablaResultados = pd.DataFrame({
-            '--': ['VaR' , 'ES'],
+            'Medida de riesgo': ['VaR' , 'ES'],
             'Histórico 5%' : [Porcentaje_ViolacionesVar[0] , Porcentaje_ViolacionesVar[1]],
             'Paramétrico 5%' : [Porcentaje_ViolacionesVar[2] , Porcentaje_ViolacionesVar[3]],
             'Histórico 1%' : [Porcentaje_ViolacionesVar[4] , Porcentaje_ViolacionesVar[5]],
@@ -223,7 +223,7 @@ if activo_seleccionado:
     # Para ver la tabla
     st.subheader("Tabla de violaciones")
     Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
-    st.dataframe(Tabla_violaciones)
+    st.dataframe(Tabla_violaciones.set_index("Medida de riesgo"))
 
 
 
