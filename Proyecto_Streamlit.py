@@ -212,7 +212,7 @@ if activo_seleccionado:
     ax.set_ylabel("Valor", fontsize=12)
 
     # Configurar leyenda y cuadrícula
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3, title="Medidas seleccionadas")
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3, title="Medidas seleccionadas",fontsize=14)
     ax.grid(True, linestyle="--", alpha=0.5)
 
     # Mostrar gráfico en Streamlit
@@ -278,6 +278,10 @@ if activo_seleccionado:
     var_vol_movil = calcular_var_volatilidad_movil(df_rendimientos[activo_seleccionado])
 
     st.subheader(f"VaR con Volatilidad Móvil - {nombre_mostrado}")
+    st.write("""
+    En esta sección, se estima el VaR utilizando una volatilidad móvil bajo la suposición de una distribución normal considerando niveles de significancia de 0.05 y 0.01. 
+    Además, se muestra la gráfica con los resultados y se evalúa la eficiencia de esta aproximación calculando el número de violaciones.
+    """)
 
     # Graficamos
     fig,ax = plt.subplots(figsize=(14, 7))
@@ -295,7 +299,7 @@ if activo_seleccionado:
     ax.set_title('VaR con Volatilidad Móvil (Distribución Normal)',fontsize=15)
     ax.set_xlabel("Fecha", fontsize=12)
     ax.set_ylabel("Valor", fontsize=12)
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3,fontsize=14)
     ax.grid(True, linestyle="--", alpha=0.5)
     st.pyplot(fig)
 
