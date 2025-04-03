@@ -141,33 +141,6 @@ if activo_seleccionado:
     El VaR y el ES son medidas clave para evaluar el riesgo de un activo o cartera. Para adaptar estas métricas a condiciones cambiantes, utilizamos el enfoque de **Rolling Windows**, en el cual se calcula el VaR y el ES con una ventana de 252 días, moviendo la ventana día a día para recalcular el riesgo en cada período.
     """)
       
-    # fig = px.line()  # Inicializamos una figura vacía
-
-    # fig.add_scatter(x=df_rendimientos[activo_seleccionado].index, y=df_rendimientos[activo_seleccionado],mode='lines',name='Rendimientos')
-    # fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Histórico) 0.05"],mode='lines',name='VaR Histórico 5%', line=dict(color='red'))
-    # fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["VaR (Histórico) 0.01"],mode='lines',name='VaR Histórico 1%', line=dict(color='blue'))
-    # fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.05"],mode='lines',name='VaR Paramétrico 5%', line=dict(color='orange'))
-    # fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["VaR (Parametrico) 0.01"],mode='lines',name='VaR Paramétrico 1%', line=dict(color='green'))
-    # fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Histórico) 0.05"],mode='lines',name='ES Histórico 5%', line=dict(color='red', dash='dot'))
-    # fig.add_scatter(x=df_var_es_rolling.index, y=df_var_es_rolling["ES (Histórico) 0.01"], mode='lines',name='ES Histórico 1%', line=dict(color='blue', dash='dot'))
-    # fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.05"], mode='lines',name='ES Paramétrico 5%', line=dict(color='orange', dash='dot'))
-    # fig.add_scatter(x=df_var_es_rolling.index,y=df_var_es_rolling["ES (Parametrico) 0.01"],mode='lines',name='ES Paramétrico 1%', line=dict(color='green', dash='dot'))
-
-    # # Agregar título y etiquetas
-    # fig.update_layout(title="Rendimientos vs. VaR y ES",title_x=0.38,xaxis_title="Fecha",font=dict(size=15))
-    
-    # fig.update_layout(
-    #     legend=dict(title="Medidas seleccionadas (al darle clic en una medida, se mostrará o desaparecerá del gráfico)", orientation="h",yanchor="top",  y=-0.3, xanchor="center",x=0.5)
-    # )
-
-    # # Mostrar gráfico en Streamlit
-    # fig.update_layout(
-    # hovermode="x unified",  # Muestra etiquetas al pasar el cursor sobre la gráfica
-    # dragmode="pan"  # Permite desplazar la gráfica con el mouse
-    # )
-
-    #st.plotly_chart(fig, use_container_width=True)
-
     opciones = [
         "Rendimientos",
         "VaR (Histórico) 0.05", "VaR (Histórico) 0.01",
