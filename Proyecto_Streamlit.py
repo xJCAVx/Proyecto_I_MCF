@@ -212,7 +212,7 @@ if activo_seleccionado:
     ax.set_ylabel("Valor", fontsize=12)
 
     # Configurar leyenda y cuadrícula
-    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3, title="Medidas seleccionadas",fontsize=14)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3, title="Medidas seleccionadas",fontsize=14,title_fontsize=14)
     ax.grid(True, linestyle="--", alpha=0.5)
 
     # Mostrar gráfico en Streamlit
@@ -306,7 +306,7 @@ if activo_seleccionado:
     # Violaciones para el nuevo VaR
     violaciones_vol_movil = Calcular_Violaciones(df_rendimientos[activo_seleccionado], var_vol_movil)
     violaciones_vol_movil.iloc[:, 1] = 'Parametrico Normal'
-    st.dataframe(violaciones_vol_movil)
+    st.dataframe(violaciones_vol_movil.set_index("Medida"))
 
 
 
