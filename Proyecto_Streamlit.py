@@ -17,11 +17,19 @@ def obtener_datos(stocks):
     return df
 
 activos = ['GOOGL','GC=F','ETH-USD']
+nombres_activos = {
+    "GOOGL":"Google",
+    "GC=F": "Oro",
+    "BTC-USD": "Bitcoin",
+}
+
 df_precios=obtener_datos(activos)
 
 st.title("Evaluación de métricas de riesgo y rendimiento para activos financieros")
 
 activo_seleccionado = st.selectbox("Selecciona una activo", activos)
+
+nombre_mostrado = nombres_activos.get(activo_seleccionado, activo_seleccionado)
 
 # b) --------------------------------------------------------------------------------
 
@@ -32,7 +40,15 @@ def calcular_rendimientos(df):
 df_rendimientos = calcular_rendimientos(df_precios)
 
 if activo_seleccionado:
-    st.subheader(f"Métricas de Rendimiento")
+    st.subheader(f"Métricas de Rendimiento - {nombre_mostrado}")
+
+    st.write("""
+    A través del cálculo de los rendimientos diarios de un activo, podemos obtener métricas clave que nos permiten evaluar su comportamiento y características estadísticas. Las métricas calculadas son:
+
+    - **Rendimiento Medio Diario**: Representa el rendimiento promedio del activo por día desde 2010.
+    - **Sesgo**: Mide la asimetría de la distribución de los rendimientos, indicándonos si los rendimientos tienden a ser más positivos o negativos.
+    - **Curtosis**: Evalúa la "altitud" de las colas de la distribución de los rendimientos. Un valor elevado de curtosis sugiere una mayor probabilidad de observar movimientos extremos en los precios.
+    """)
 
     media = df_rendimientos[activo_seleccionado].mean()
     sesgo = skew(df_rendimientos[activo_seleccionado])
@@ -81,7 +97,18 @@ if activo_seleccionado:
         return resultados
 
     var_es_results = calcular_var_es(df_rendimientos[activo_seleccionado])
-    st.subheader("Cálculo de Value at Risk y Expected Shortfall")
+    st.subheader(f"Cálculo de Value at Risk y Expected Shortfall - {nombre_mostrado}")
+    st.write("""
+    En esta sección, calcularemos el Valor en Riesgo (VaR) y el Valor Esperado (ES) de un activo financiero bajo diferentes intervalos de confianza (\(\alpha = 0.95\), \(0.975\), y \(0.99\)) utilizando varios métodos de aproximación. Estos métodos incluyen:
+
+    - **Aproximación Paramétrica**:
+    - **Distribución Normal**: Asumimos que los rendimientos siguen una distribución normal para calcular el VaR y el ES.
+    - **Distribución t-Student**: Se considera la distribución t-Student para tener en cuenta los posibles colas más gruesas de los rendimientos.
+
+    - **Método Histórico**: Utilizando los datos históricos disponibles, se calcula el VaR y el ES directamente a partir de los percentiles de los rendimientos observados.
+
+    - **Simulación de Monte Carlo**: Generando una gran cantidad de simulaciones de los rendimientos, se calcula el VaR y el ES a partir de las distribuciones obtenidas.
+    """)
     st.dataframe(var_es_results)
 
 # d) --------------------------------------------------------------------------------
@@ -109,7 +136,10 @@ if activo_seleccionado:
     #Aplicamos la función que creamos para los rendimientos del activo seleccionado
     df_var_es_rolling = rolling_var_es(df_rendimientos[activo_seleccionado])
 
-    st.subheader("Rolling Windows para VaR y ES (252 días)")
+    st.subheader(f"Rolling Windows para VaR y ES (252 días) - {nombre_mostrado}")
+    st.write("""
+    El VaR y el ES son medidas clave para evaluar el riesgo de un activo o cartera. Para adaptar estas métricas a condiciones cambiantes, utilizamos el enfoque de Rolling Windows, en el cual se calcula el VaR y el ES con una ventana de 252 días, moviendo la ventana día a día para recalcular el riesgo en cada período.
+    """)
       
     # fig = px.line()  # Inicializamos una figura vacía
 
@@ -223,10 +253,14 @@ if activo_seleccionado:
         return pd.DataFrame(resultados)
 
     # Para ver la tabla
-    st.subheader("Evaluación de Violaciones")
+    st.subheader(f"Evaluación de Violaciones - {nombre_mostrado}")
+    st.write("""
+    En este análisis, comparamos la precisión de las estimaciones de riesgo usando **VaR** y **ES** calculados con dos métodos: **histórico** y **paramétrico normal**. 
+    La tabla muestra el número de **violaciones** (cuando la pérdida real excede la estimación) para cada nivel de confianza \( \alpha \), comparado con el **porcentaje esperado** según el nivel de confianza. 
+    Una estimación adecuada debería tener un porcentaje de violaciones cercano al nivel de confianza, idealmente menor al **2.5%**.
+    """)
     tabla_violaciones = Calcular_Violaciones(df_rendimientos[activo_seleccionado], df_var_es_rolling)
     st.dataframe(tabla_violaciones.set_index("Medida"))
-
 
 
 
