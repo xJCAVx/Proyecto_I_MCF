@@ -99,14 +99,11 @@ if activo_seleccionado:
     var_es_results = calcular_var_es(df_rendimientos[activo_seleccionado])
     st.subheader(f"Cálculo de Value at Risk y Expected Shortfall - {nombre_mostrado}")
     st.write("""
-    En esta sección, calcularemos el Valor en Riesgo (VaR) y el Valor Esperado (ES) de un activo financiero bajo diferentes intervalos de confianza (\(\alpha = 0.95\), \(0.975\), y \(0.99\)) utilizando varios métodos de aproximación. Estos métodos incluyen:
+    En esta sección, calculamos el Valor en Riesgo (VaR) y el Valor Esperado (ES) del activo financiero bajo diferentes intervalos de confianza (0.95, 0.975, y 0.99) utilizando varios métodos de aproximación.
 
-    - **Aproximación Paramétrica**:
     - **Distribución Normal**: Asumimos que los rendimientos siguen una distribución normal para calcular el VaR y el ES.
     - **Distribución t-Student**: Se considera la distribución t-Student para tener en cuenta los posibles colas más gruesas de los rendimientos.
-
     - **Método Histórico**: Utilizando los datos históricos disponibles, se calcula el VaR y el ES directamente a partir de los percentiles de los rendimientos observados.
-
     - **Simulación de Monte Carlo**: Generando una gran cantidad de simulaciones de los rendimientos, se calcula el VaR y el ES a partir de las distribuciones obtenidas.
     """)
     st.dataframe(var_es_results)
@@ -256,8 +253,8 @@ if activo_seleccionado:
     st.subheader(f"Evaluación de Violaciones - {nombre_mostrado}")
     st.write("""
     En este análisis, comparamos la precisión de las estimaciones de riesgo usando **VaR** y **ES** calculados con dos métodos: **histórico** y **paramétrico normal**. 
-    La tabla muestra el número de **violaciones** (cuando la pérdida real excede la estimación) para cada nivel de confianza \( \alpha \), comparado con el **porcentaje esperado** según el nivel de confianza. 
-    Una estimación adecuada debería tener un porcentaje de violaciones cercano al nivel de confianza, idealmente menor al **2.5%**.
+    La tabla muestra el número de **violaciones** (cuando la pérdida real excede la estimación) para cada nivel de confianza.
+    **Nota:** Una estimación adecuada debería tener un porcentaje de violaciones cercano al nivel de significancia α, idealmente menor al **2.5%**.
     """)
     tabla_violaciones = Calcular_Violaciones(df_rendimientos[activo_seleccionado], df_var_es_rolling)
     st.dataframe(tabla_violaciones.set_index("Medida"))
