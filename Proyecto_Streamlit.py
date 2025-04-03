@@ -12,6 +12,7 @@ from scipy.stats import kurtosis, skew, norm, t
 # a) --------------------------------------------------------------------------------
 
 # Descargamos la información de los activos desde 2010
+@st.cache_data
 def obtener_datos(stocks):
     df = yf.download(stocks, start='2010-01-01',end='2025-04-03')['Close']
     return df
@@ -37,15 +38,13 @@ nombre_mostrado = nombres_activos.get(activo_seleccionado, activo_seleccionado)
 # b) --------------------------------------------------------------------------------
 
 #Calculamos los rendimientos diarios, la media, el sesgo y el exceso de curtosis
-@st.cache_data
-def calcular_rendimientos(df):
-    return df.pct_change().dropna()
-df_rendimientos = calcular_rendimientos(df_precios)
-st.write("Primeros datos descargados:")
-st.write(df_precios.head(10))
-st.write(df_rendimientos.head(10))
 
 if activo_seleccionado:
+    @st.cache_data
+    def calcular_rendimientos(df):
+        return df.pct_change().dropna()
+    df_rendimientos = calcular_rendimientos(df_precios[activo_seleccionado])
+
     st.subheader(f"Métricas de Rendimiento - {nombre_mostrado}")
 
     st.write("""
