@@ -41,6 +41,9 @@ nombre_mostrado = nombres_activos.get(activo_seleccionado, activo_seleccionado)
 def calcular_rendimientos(df):
     return df.pct_change().dropna()
 df_rendimientos = calcular_rendimientos(df_precios)
+st.write("Primeros datos descargados:")
+st.write(df_precios.head(10))
+st.write(df_rendimientos.head(10))
 
 if activo_seleccionado:
     st.subheader(f"Métricas de Rendimiento - {nombre_mostrado}")
