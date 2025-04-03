@@ -139,31 +139,75 @@ plt.show()
 # Agregar a Streamlit para poder activar y desactivar las medidas de riesgo.
 
 
-# e) Conteo y resumen de violaciones.
+# e) Función de violaciones corregida
+def Calcular_Violaciones(dfretornos, DataframeVaryES):
+    # Alineamos los índices y eliminamos NaN
+    df_aligned = DataframeVaryES.dropna()
+    returns_aligned = dfretornos.reindex(df_aligned.index)
+    
+    resultados = []
+    
+    for columna in df_aligned.columns:
+        # Extraemos alpha del nombre
+        alpha = 0.05 if '0.05' in columna else 0.01 if '0.01' in columna else None
+        
+        # Calculamos violaciones
+        violaciones = (returns_aligned < df_aligned[columna]).sum()
+        total_datos = len(df_aligned[columna])
+        porcentaje = (violaciones / total_datos) * 100
+        
+        resultados.append({
+            'Medida': columna.split()[0],  # VaR o ES
+            'Método': columna.split()[2] if 'Param' in columna else columna.split()[1],
+            'α': alpha,
+            'Violaciones': violaciones,
+            '% Observado': porcentaje,
+            '% Esperado': alpha * 100 if alpha else 'N/A'
+        })
+    
+    return pd.DataFrame(resultados)
 
-def Calcular_Violaciones(dfretornos , DataframeVaryES):
-  NumeroViolaciones = []
-  Porcentaje_ViolacionesVar = []
-  TotalDatos = len(dfretornos) - 251
+# Uso corregido
+tabla_violaciones = Calcular_Violaciones(df_rendimientoPARTICULAR, df_var_es_rolling)
+print("\nTabla de Violaciones Corregida:")
+print(tabla_violaciones)
 
-  # Calculamos violaciones
-  for columna in DataframeVaryES:
-    ViolacionesVar = dfretornos < DataframeVaryES[columna]
-    Numero_ViolacionesVar = ViolacionesVar.sum()
+# f) Implementación del VaR con volatilidad móvil
+def calcular_var_volatilidad_movil(serie_rendimientos, alphas=[0.05, 0.01], window=252):
+    # Calculamos volatilidad móvil
+    rolling_std = serie_rendimientos.rolling(window).std()
+    
+    resultados = pd.DataFrame(index=serie_rendimientos.index)
+    
+    for alpha in alphas:
+        q_alpha = norm.ppf(alpha)
+        resultados[f'VaR Vol Móvil ({alpha})'] = q_alpha * rolling_std
+    
+    return resultados.dropna()
 
-    NumeroViolaciones.append(Numero_ViolacionesVar)
-    Porcentaje_ViolacionesVar.append((Numero_ViolacionesVar / TotalDatos) * 100)
+# Calculamos y mostramos
+var_vol_movil = calcular_var_volatilidad_movil(df_rendimientoPARTICULAR)
+print("\nVaR con Volatilidad Móvil:")
+print(var_vol_movil.tail())
 
-  # Metemos los resultados "%"" en una tabla
-  TablaResultados = pd.DataFrame({
-    '--': ['VaR' , 'ES'],
-    'Histórico 5%' : [Porcentaje_ViolacionesVar[0] , Porcentaje_ViolacionesVar[1]],
-    'Paramétrico 5%' : [Porcentaje_ViolacionesVar[2] , Porcentaje_ViolacionesVar[3]],
-    'Histórico 1%' : [Porcentaje_ViolacionesVar[4] , Porcentaje_ViolacionesVar[5]],
-    'Paramétrico 1%' : [Porcentaje_ViolacionesVar[6] , Porcentaje_ViolacionesVar[7]],
-  })
+# Graficamos
+plt.figure(figsize=(14, 7))
+plt.plot(df_rendimientoPARTICULAR.index, df_rendimientoPARTICULAR, label='Rendimientos NFLX', alpha=0.5)
 
-  return TablaResultados
+# Añadimos VaRs
+colors = ['darkred', 'maroon']
+for i, alpha in enumerate([0.05, 0.01]):
+    plt.plot(var_vol_movil.index, 
+             var_vol_movil[f'VaR Vol Móvil ({alpha})'], 
+             label=f'VaR {int(alpha*100)}%', 
+             linestyle='--', 
+             color=colors[i])
 
-# Para ver la tabla
-Calcular_Violaciones(df_rendimientoPARTICULAR , df_var_es_rolling) # Los datos son porcentajes
+plt.title('VaR con Volatilidad Móvil (Distribución Normal)')
+plt.legend()
+plt.show()
+
+# Violaciones para el nuevo VaR
+violaciones_vol_movil = Calcular_Violaciones(df_rendimientoPARTICULAR, var_vol_movil)
+print("\nViolaciones para VaR Volatilidad Móvil:")
+print(violaciones_vol_movil)
