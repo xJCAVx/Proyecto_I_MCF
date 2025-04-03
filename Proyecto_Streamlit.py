@@ -54,7 +54,7 @@ if activo_seleccionado:
     - **Sesgo**: Mide la asimetría de la distribución de los rendimientos, indicándonos si los rendimientos tienden a ser más positivos o negativos.
     - **Curtosis**: Evalúa la "altitud" de las colas de la distribución de los rendimientos. Un valor elevado de curtosis sugiere una mayor probabilidad de observar movimientos extremos en los precios.
     """)
-
+    st.dataframe(df_rendimientos)
     media = df_rendimientos.mean()
     sesgo = skew(df_rendimientos)
     curtosis = kurtosis(df_rendimientos)
