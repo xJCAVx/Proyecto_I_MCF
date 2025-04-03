@@ -44,7 +44,7 @@ if activo_seleccionado:
     def calcular_rendimientos(df):
         return df.pct_change().dropna()
     df_rendimientos = calcular_rendimientos(df_precios[activo_seleccionado])
-    st.dataframe(df_rendimientos)
+
     st.subheader(f"Métricas de Rendimiento - {nombre_mostrado}")
 
     st.write("""
