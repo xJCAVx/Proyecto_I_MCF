@@ -196,36 +196,38 @@ if activo_seleccionado:
 
 # Conteo y resumen de violaciones
     @st.cache_data
-    def Calcular_Violaciones(dfretornos , DataframeVaryES):
-        NumeroViolaciones = []
-        Porcentaje_ViolacionesVar = []
-        TotalDatos = len(dfretornos) - 251
-
-    # Calculamos violaciones
-        for columna in DataframeVaryES.columns:
-            ViolacionesVar = dfretornos < DataframeVaryES[columna]
-            Numero_ViolacionesVar = ViolacionesVar.sum()
-
-            NumeroViolaciones.append(Numero_ViolacionesVar)
-            Porcentaje_ViolacionesVar.append((Numero_ViolacionesVar / TotalDatos) * 100)
-
-    # Metemos los resultados "%"" en una tabla
-        TablaResultados = pd.DataFrame({
-            'Medida de riesgo': ['VaR' , 'ES'],
-            'Histórico 5%' : [Porcentaje_ViolacionesVar[0] , Porcentaje_ViolacionesVar[1]],
-            'Paramétrico 5%' : [Porcentaje_ViolacionesVar[2] , Porcentaje_ViolacionesVar[3]],
-            'Histórico 1%' : [Porcentaje_ViolacionesVar[4] , Porcentaje_ViolacionesVar[5]],
-            'Paramétrico 1%' : [Porcentaje_ViolacionesVar[6] , Porcentaje_ViolacionesVar[7]],
-        })
-
-        return TablaResultados  
+    def Calcular_Violaciones(dfretornos, DataframeVaryES):
+        # Alineamos los índices y eliminamos NaN
+        df_aligned = DataframeVaryES.dropna()
+        returns_aligned = dfretornos.reindex(df_aligned.index)
+        
+        resultados = []
+        
+        for columna in df_aligned.columns:
+            # Extraemos alpha del nombre
+            alpha = 0.05 if '0.05' in columna else 0.01 if '0.01' in columna else None
+            
+            # Calculamos violaciones
+            violaciones = (returns_aligned < df_aligned[columna]).sum()
+            total_datos = len(df_aligned[columna])
+            porcentaje = (violaciones / total_datos) * 100
+            
+            #Para mostrar los resultados
+            resultados.append({
+                'Medida': columna.split()[0],  # VaR o ES
+                'Método': columna.split()[2] if 'Param' in columna else columna.split()[1],
+                'α': alpha,
+                'Violaciones': violaciones,
+                '% Observado': porcentaje,
+                '% Esperado': alpha * 100 if alpha else 'N/A'
+            })
+        
+        return pd.DataFrame(resultados)
 
     # Para ver la tabla
     st.subheader("Evaluación de Violaciones")
-    Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
-    st.dataframe(Tabla_violaciones.set_index("Medida de riesgo"))
-
-
+    tabla_violaciones = Calcular_Violaciones(df_rendimientos[activo_seleccionado], df_var_es_rolling)
+    st.dataframe(tabla_violaciones.set_index("Medida"))
 
 
 
