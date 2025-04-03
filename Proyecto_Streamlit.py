@@ -127,7 +127,7 @@ if activo_seleccionado:
     fig.update_layout(title="Rendimientos vs. VaR y ES",title_x=0.38,xaxis_title="Fecha",font=dict(size=15))
     
     fig.update_layout(
-        legend=dict(title="Medidas seleccionadas", orientation="h",yanchor="top",  y=-0.3, xanchor="center",x=0.5)
+        legend=dict(title="Medidas seleccionadas (al darle clic en una medida, se mostrará o desaparecerá del gráfico)", orientation="h",yanchor="top",  y=-0.3, xanchor="center",x=0.5)
     )
 
     # Mostrar gráfico en Streamlit
