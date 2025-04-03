@@ -16,13 +16,14 @@ def obtener_datos(stocks):
     df = yf.download(stocks, start='2010-01-01',end='2025-04-03')['Close']
     return df
 
-activos = ['GOOGL', 'AMZN', 'META', 'NFLX', 'TSLA']
+activos = ['GOOGL', 'AMZN', 'META', 'NFLX', 'TSLA','SPY']
 nombres_activos = {
     "GOOGL":"Google",
     "AMZN": "Amazon",
     "META": "Meta",
     "NFLX": "Netflix",
-    "TSLA": "Tesla"
+    "TSLA": "Tesla",
+    "SPY": "SPDR S&P 500 ETF Trust"
 }
 
 df_precios=obtener_datos(activos)
