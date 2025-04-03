@@ -55,9 +55,9 @@ if activo_seleccionado:
     - **Curtosis**: Evalúa la "altitud" de las colas de la distribución de los rendimientos. Un valor elevado de curtosis sugiere una mayor probabilidad de observar movimientos extremos en los precios.
     """)
     
-    media = df_rendimientos[activo_seleccionado].mean()
-    sesgo = skew(df_rendimientos[activo_seleccionado])
-    curtosis = kurtosis(df_rendimientos[activo_seleccionado])
+    media = df_rendimientos.mean()
+    sesgo = skew(df_rendimientos)
+    curtosis = kurtosis(df_rendimientos)
     
     col1, col2, col3= st.columns(3)
     col1.metric("Rendimiento Medio Diario", f"{media:.4%}")
@@ -101,7 +101,7 @@ if activo_seleccionado:
             resultados.loc[f"{int(NC * 100)}% de confianza"] = [VaR_norm, ES_norm, VaR_t, ES_t, VaR_hist, ES_hist, VaR_MC, ES_MC]
         return resultados
 
-    var_es_results = calcular_var_es(df_rendimientos[activo_seleccionado])
+    var_es_results = calcular_var_es(df_rendimientos)
     st.subheader(f"Cálculo de Value at Risk y Expected Shortfall - {nombre_mostrado}")
     st.write("""
     En esta sección, calculamos el **Valor en Riesgo (VaR)** y el **Valor Esperado (ES)** del activo financiero bajo diferentes intervalos de confianza (0.95, 0.975, y 0.99) utilizando varios métodos de aproximación.
@@ -136,7 +136,7 @@ if activo_seleccionado:
         return pd.concat(resultados, axis=1)
 
     #Aplicamos la función que creamos para los rendimientos del activo seleccionado
-    df_var_es_rolling = rolling_var_es(df_rendimientos[activo_seleccionado])
+    df_var_es_rolling = rolling_var_es(df_rendimientos)
 
     st.subheader(f"Rolling Windows para VaR y ES (252 días) - {nombre_mostrado}")
     st.write("""
@@ -157,7 +157,7 @@ if activo_seleccionado:
 
     # Graficar Rendimientos
     if "Rendimientos" in series_seleccionadas:
-        ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label=f"Rendimientos {nombre_mostrado}")
+        ax.plot(df_rendimientos.index, df_rendimientos, label=f"Rendimientos {nombre_mostrado}")
 
     # Graficar cada serie según la selección del usuario
     if "VaR (Histórico) 0.05" in series_seleccionadas:
@@ -235,7 +235,7 @@ if activo_seleccionado:
     
     **Nota:** Una estimación adecuada debería tener un porcentaje de violaciones cercano al nivel de significancia α, idealmente menor al 2.5%.
     """)
-    tabla_violaciones = Calcular_Violaciones(df_rendimientos[activo_seleccionado], df_var_es_rolling)
+    tabla_violaciones = Calcular_Violaciones(df_rendimientos, df_var_es_rolling)
     st.dataframe(tabla_violaciones.set_index("Medida"))
 
 # f) --------------------------------------------------------------------------------
@@ -253,7 +253,7 @@ if activo_seleccionado:
         return resultados.dropna()
 
     # Calculamos y mostramos
-    var_vol_movil = calcular_var_volatilidad_movil(df_rendimientos[activo_seleccionado])
+    var_vol_movil = calcular_var_volatilidad_movil(df_rendimientos)
 
     st.subheader(f"VaR con Volatilidad Móvil - {nombre_mostrado}")
     st.write("""
@@ -263,7 +263,7 @@ if activo_seleccionado:
 
     # Graficamos
     fig,ax = plt.subplots(figsize=(14, 7))
-    ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label=f'Rendimientos {nombre_mostrado}', alpha=0.5)
+    ax.plot(df_rendimientos.index, df_rendimientos, label=f'Rendimientos {nombre_mostrado}', alpha=0.5)
 
     # Añadimos VaRs
     colors = ['red', 'blue']
@@ -282,7 +282,7 @@ if activo_seleccionado:
     st.pyplot(fig)
 
     # Violaciones para el nuevo VaR
-    violaciones_vol_movil = Calcular_Violaciones(df_rendimientos[activo_seleccionado], var_vol_movil)
+    violaciones_vol_movil = Calcular_Violaciones(df_rendimientos, var_vol_movil)
     violaciones_vol_movil.iloc[:, 1] = 'Parametrico Normal'
     st.dataframe(violaciones_vol_movil.set_index("Medida"))
 
