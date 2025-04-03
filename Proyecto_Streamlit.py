@@ -221,7 +221,7 @@ if activo_seleccionado:
         return TablaResultados  
 
     # Para ver la tabla
-    st.subheader("Tabla de violaciones")
+    st.subheader("Evaluación de Violaciones")
     Tabla_violaciones=Calcular_Violaciones(df_rendimientos[activo_seleccionado] , df_var_es_rolling) # Los datos son porcentajes
     st.dataframe(Tabla_violaciones.set_index("Medida de riesgo"))
 
