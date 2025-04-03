@@ -280,21 +280,24 @@ if activo_seleccionado:
     st.subheader(f"VaR con Volatilidad Móvil - {nombre_mostrado}")
 
     # Graficamos
-    plt.figure(figsize=(14, 7))
-    plt.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label=f'Rendimientos {nombre_mostrado}', alpha=0.5)
+    fig,ax = plt.subplots(figsize=(14, 7))
+    ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label=f'Rendimientos {nombre_mostrado}', alpha=0.5)
 
     # Añadimos VaRs
-    colors = ['darkred', 'maroon']
+    colors = ['red', 'blue']
     for i, alpha in enumerate([0.05, 0.01]):
-        plt.plot(var_vol_movil.index, 
+        ax.plot(var_vol_movil.index, 
                 var_vol_movil[f'VaR Vol Móvil ({alpha})'], 
                 label=f'VaR {int(alpha*100)}%', 
-                linestyle='--', 
+                linestyle='-', 
                 color=colors[i])
 
-    plt.title('VaR con Volatilidad Móvil (Distribución Normal)')
-    plt.legend()
-    st.pyplot(plt)
+    ax.set_title('VaR con Volatilidad Móvil (Distribución Normal)',fontsize=15)
+    ax.set_xlabel("Fecha", fontsize=12)
+    ax.set_ylabel("Valor", fontsize=12)
+    ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.15), ncol=3)
+    ax.grid(True, linestyle="--", alpha=0.5)
+    st.pyplot(fig)
 
     # Violaciones para el nuevo VaR
     violaciones_vol_movil = Calcular_Violaciones(df_rendimientos[activo_seleccionado], var_vol_movil)
