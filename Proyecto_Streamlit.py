@@ -99,7 +99,7 @@ if activo_seleccionado:
     var_es_results = calcular_var_es(df_rendimientos[activo_seleccionado])
     st.subheader(f"Cálculo de Value at Risk y Expected Shortfall - {nombre_mostrado}")
     st.write("""
-    En esta sección, calculamos el Valor en Riesgo (VaR) y el Valor Esperado (ES) del activo financiero bajo diferentes intervalos de confianza (0.95, 0.975, y 0.99) utilizando varios métodos de aproximación.
+    En esta sección, calculamos el **Valor en Riesgo (VaR)** y el **Valor Esperado (ES)** del activo financiero bajo diferentes intervalos de confianza (0.95, 0.975, y 0.99) utilizando varios métodos de aproximación.
 
     - **Distribución Normal**: Asumimos que los rendimientos siguen una distribución normal para calcular el VaR y el ES.
     - **Distribución t-Student**: Se considera la distribución t-Student para tener en cuenta los posibles colas más gruesas de los rendimientos.
@@ -135,7 +135,7 @@ if activo_seleccionado:
 
     st.subheader(f"Rolling Windows para VaR y ES (252 días) - {nombre_mostrado}")
     st.write("""
-    El VaR y el ES son medidas clave para evaluar el riesgo de un activo o cartera. Para adaptar estas métricas a condiciones cambiantes, utilizamos el enfoque de Rolling Windows, en el cual se calcula el VaR y el ES con una ventana de 252 días, moviendo la ventana día a día para recalcular el riesgo en cada período.
+    El VaR y el ES son medidas clave para evaluar el riesgo de un activo o cartera. Para adaptar estas métricas a condiciones cambiantes, utilizamos el enfoque de **Rolling Windows**, en el cual se calcula el VaR y el ES con una ventana de 252 días, moviendo la ventana día a día para recalcular el riesgo en cada período.
     """)
       
     # fig = px.line()  # Inicializamos una figura vacía
@@ -179,7 +179,7 @@ if activo_seleccionado:
 
     # Graficar Rendimientos
     if "Rendimientos" in series_seleccionadas:
-        ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label="Rendimientos")
+        ax.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label=f"Rendimientos {nombre_mostrado}")
 
     # Graficar cada serie según la selección del usuario
     if "VaR (Histórico) 0.05" in series_seleccionadas:
@@ -252,16 +252,53 @@ if activo_seleccionado:
     # Para ver la tabla
     st.subheader(f"Evaluación de Violaciones - {nombre_mostrado}")
     st.write("""
-    En este análisis, comparamos la precisión de las estimaciones de riesgo usando **VaR** y **ES** calculados con dos métodos: **histórico** y **paramétrico normal**. 
+    En este análisis, comparamos la precisión de las estimaciones de riesgo usando VaR y ES calculados con dos métodos: histórico y paramétrico normal. 
     La tabla muestra el número de **violaciones** (cuando la pérdida real excede la estimación) para cada nivel de confianza.
-    **Nota:** Una estimación adecuada debería tener un porcentaje de violaciones cercano al nivel de significancia α, idealmente menor al **2.5%**.
+    
+    **Nota:** Una estimación adecuada debería tener un porcentaje de violaciones cercano al nivel de significancia α, idealmente menor al 2.5%.
     """)
     tabla_violaciones = Calcular_Violaciones(df_rendimientos[activo_seleccionado], df_var_es_rolling)
     st.dataframe(tabla_violaciones.set_index("Medida"))
 
+# f) --------------------------------------------------------------------------------
 
+    def calcular_var_volatilidad_movil(serie_rendimientos, alphas=[0.05, 0.01], window=252):
+        # Calculamos volatilidad móvil
+        rolling_std = serie_rendimientos.rolling(window).std()
+        
+        resultados = pd.DataFrame(index=serie_rendimientos.index)
+        
+        for alpha in alphas:
+            q_alpha = norm.ppf(alpha)
+            resultados[f'VaR Vol Móvil ({alpha})'] = q_alpha * rolling_std
+        
+        return resultados.dropna()
 
+    # Calculamos y mostramos
+    var_vol_movil = calcular_var_volatilidad_movil(df_rendimientos[activo_seleccionado])
 
+    st.subheader(f"VaR con Volatilidad Móvil - {nombre_mostrado}")
+
+    # Graficamos
+    plt.figure(figsize=(14, 7))
+    plt.plot(df_rendimientos[activo_seleccionado].index, df_rendimientos[activo_seleccionado], label=f'Rendimientos {nombre_mostrado}', alpha=0.5)
+
+    # Añadimos VaRs
+    colors = ['darkred', 'maroon']
+    for i, alpha in enumerate([0.05, 0.01]):
+        plt.plot(var_vol_movil.index, 
+                var_vol_movil[f'VaR Vol Móvil ({alpha})'], 
+                label=f'VaR {int(alpha*100)}%', 
+                linestyle='--', 
+                color=colors[i])
+
+    plt.title('VaR con Volatilidad Móvil (Distribución Normal)')
+    plt.legend()
+    plt.show()
+
+    # Violaciones para el nuevo VaR
+    violaciones_vol_movil = Calcular_Violaciones(df_rendimientos[activo_seleccionado], var_vol_movil)
+    st.dataframe(violaciones_vol_movil)
 
 
 
