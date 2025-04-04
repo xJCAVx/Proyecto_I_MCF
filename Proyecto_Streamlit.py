@@ -115,7 +115,29 @@ if activo_seleccionado:
 
 # d) --------------------------------------------------------------------------------
 
-# Cálculo de VaR y ES con ventanas móviles para alpha 0.05 y 0.01
+    # Función para calcular ES usando t-Student
+    def ES_Paramétrico_T_student(df, CN ,window=252, nu=10): # Nu = Grados de libertad de T-student
+        # Usamos 10 grados porque esperamos colas pesadas pero tambien bastantes datos cerca de la media
+
+        # Estimamos parámetros de la T-student
+        Media = np.mean(df)
+        VarianzaInsesgada = np.var(df, ddof=1)  # Varianza muestral insesgada
+        VarianzaAjustada = ((nu - 2) / nu) * VarianzaInsesgada
+        sigma = np.sqrt(VarianzaAjustada) # Desviación Estandar
+
+        # Calculamos el VaR para hacer el corte
+        VaR = t.ppf(CN , df=nu, loc=Media, scale=sigma)
+
+    # Promedio de los cuantiles que entran por debajo del VaR
+        def Promedio_cuantiles(alpha, nu , Media, sigma, num_points=1000):
+            cuantiles = t.ppf(np.linspace(1e-6, alpha-1e-6, num_points), df=nu, loc= Media, scale= sigma)
+            return np.mean(cuantiles)
+
+    # Espected Shortfall = CVaR
+        ES = Promedio_cuantiles( CN, nu, Media, sigma) # Tomamos solo al primer CN y NO 1-CN
+        return ES
+
+    # Cálculo de VaR y ES con ventanas móviles para alpha 0.05 y 0.01
     def rolling_var_es(df, window=252, CNS=[0.05, 0.01]):
         resultados = []
 
@@ -123,7 +145,7 @@ if activo_seleccionado:
             VaR_histo = df.rolling(window).quantile(CN)
             ES_histo = df.rolling(window).apply(lambda x: x[x <= x.quantile(CN)].mean())
             VaR_parame = norm.ppf(CN) * df.rolling(window).std()
-            ES_parame = df.rolling(window).mean() - (df.rolling(window).std() * norm.pdf(norm.ppf(CN)) / (1 - CN))
+            ES_parame = df.rolling(window).apply(lambda x: ES_Paramétrico_T_student(x, CN), raw=True)
 
             resultados.append(pd.DataFrame({
                 f'VaR (Histórico) {CN}': VaR_histo,
