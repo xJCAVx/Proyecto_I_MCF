@@ -26,11 +26,12 @@ nombres_activos = {
     "TSLA": "Tesla",
     "SPY": "SPDR S&P 500 ETF Trust"
 }
-
+#Obtenemos la información de nuestros activos
 df_precios=obtener_datos(activos)
 
 st.title("Evaluación de métricas de riesgo y rendimiento para activos financieros")
 
+#Caja de selección de activos
 activo_seleccionado = st.selectbox("Selecciona una activo", activos)
 
 nombre_mostrado = nombres_activos.get(activo_seleccionado, activo_seleccionado)
@@ -40,6 +41,7 @@ nombre_mostrado = nombres_activos.get(activo_seleccionado, activo_seleccionado)
 #Calculamos los rendimientos diarios, la media, el sesgo y el exceso de curtosis
 
 if activo_seleccionado:
+    #Función para calcular los rendimientos diarios
     @st.cache_data
     def calcular_rendimientos(df):
         return df.pct_change().dropna()
@@ -55,6 +57,7 @@ if activo_seleccionado:
     - **Curtosis**: Evalúa la "altitud" de las colas de la distribución de los rendimientos. Un valor elevado de curtosis sugiere una mayor probabilidad de observar movimientos extremos en los precios.
     """)
     
+    #Calculo de la media, sesgo y curtosis
     media = df_rendimientos.mean()
     sesgo = skew(df_rendimientos)
     curtosis = kurtosis(df_rendimientos)
@@ -67,6 +70,7 @@ if activo_seleccionado:
 # c) --------------------------------------------------------------------------------
 
 # Calculo de VAR y ES con distintos métodos para múltiples valores de alpha
+    #Funcion para calcular el VaR y el ES
     @st.cache_data
     def calcular_var_es(df):
         NCS = [0.95, 0.975, 0.99]
