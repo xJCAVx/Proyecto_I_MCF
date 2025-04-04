@@ -252,7 +252,7 @@ if activo_seleccionado:
     # Para ver la tabla
     st.subheader(f"Evaluación de Violaciones - {nombre_mostrado}")
     st.write("""
-    En este análisis, comparamos la precisión de las estimaciones de riesgo usando VaR y ES calculados con dos métodos: histórico y paramétrico normal. 
+    En este análisis, comparamos la precisión de las estimaciones de riesgo usando VaR y ES calculados con dos métodos: histórico y paramétrico t-student. 
     La tabla muestra el número de **violaciones** (cuando la pérdida real excede la estimación) para cada nivel de confianza.
     
     **Nota:** Una estimación adecuada debería tener un porcentaje de violaciones cercano al nivel de significancia α, idealmente menor al 2.5%.
